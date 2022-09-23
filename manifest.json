@@ -1,0 +1,43 @@
+{
+	"format_version": 2,
+	"header": {
+		"name": "PvP Bot",
+		"description": "author: arutaka, Nano",
+		"uuid": "933983e2-1164-4978-97c3-046b0551b821",
+		"platform_locked": false,
+		"version": [1,0,0],
+		"min_engine_version": [
+			1,
+			13,
+			0
+		],
+		"pack_scope": "world"
+	},
+	"modules": [
+		{
+		  "description": "JavaScript module code",
+		  "language": "javascript",
+		  "type": "script",
+		  "uuid": "7bf81652-c893-454d-8e31-466fe1b356d0",
+		  "version": [0, 0, 1],
+		  "entry": "scripts/index.js"
+		}
+	  ],
+	"dependencies": [
+		{
+			// mojang-minecraft
+			"module_name": "mojang-minecraft",
+			"version": "1.0.0-beta"
+		},
+		{
+			// mojang-gametest
+			"module_name": "mojang-gametest",
+			"version": "1.0.0-beta"
+		},
+		{
+			// mojang-minecraft-ui
+			"module_name": "mojang-minecraft-ui",
+			"version": "1.0.0-beta"
+		}
+	  ]
+}
