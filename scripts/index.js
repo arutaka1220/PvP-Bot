@@ -3,20 +3,20 @@ import { register, SimulatedPlayer } from "mojang-gametest";
 import { setTickTimeout as timeout, setTickInterval as interval} from "./scheduling";
 //mieteru?
 register("pvp", "bot", (test) => {
-    let SPlayer = test.spawnSimulatedPlayer(new BlockLocation(0,0,0), "Hacker");
-    let tikai = SPlayer.runCommand("testfor @p[rm=1,name=!Hacker]").victim[0];
+    let SPlayer = test.spawnSimulatedPlayer(new BlockLocation(0,0,0), "PvP Bot");
+    let tikai = SPlayer.runCommand('testfor @p[rm=1,name=!"PvP Bot"]').victim[0];
     /** @type { Player } */
     let player;
     player = getPlayerByName(tikai);
     interval(() => {
-        tikai = SPlayer.runCommand("testfor @p[rm=1,name=!Hacker]").victim[0];
+        tikai = SPlayer.runCommand('testfor @p[rm=1,name=!"PvP Bot"]').victim[0];
         player = getPlayerByName(tikai);
         let random = Math.floor(Math.random() * 2);
         if(random === 1) {
             placeItems(SPlayer, "minecraft:planks", 5)
         }
     }, 10);
-    SPlayer.setItem(new ItemStack(MinecraftItemTypes.woodenSword), 0);
+    SPlayer.setItem(new ItemStack(MinecraftItemTypes.ironSword), 0);
     interval(() => {
         SPlayer.dimension;
         SPlayer.navigateToEntity(player);
