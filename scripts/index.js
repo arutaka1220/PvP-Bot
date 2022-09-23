@@ -1,7 +1,7 @@
 import { world, BlockLocation, GameMode, MinecraftEffectTypes, ItemStack, MinecraftItemTypes, Items, EntityRaycastOptions, MinecraftBlockTypes, Player, Location, Vector} from "mojang-minecraft";
 import { register, SimulatedPlayer } from "mojang-gametest";
 import { setTickTimeout as timeout, setTickInterval as interval} from "./scheduling";
-
+//mieteru?
 register("pvp", "bot", (test) => {
     let SPlayer = test.spawnSimulatedPlayer(new BlockLocation(0,0,0), "Hacker");
     let tikai = SPlayer.runCommand("testfor @p[rm=1,name=!Hacker]").victim[0];
@@ -18,6 +18,7 @@ register("pvp", "bot", (test) => {
     }, 10);
     SPlayer.setItem(new ItemStack(MinecraftItemTypes.woodenSword), 0);
     interval(() => {
+        SPlayer.dimension;
         SPlayer.navigateToEntity(player);
         SPlayer.lookAtEntity(player);
         const r = new EntityRaycastOptions();
