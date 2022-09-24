@@ -38,15 +38,14 @@ register("pvp", "bot", (test) => {
     interval(() => {
         tikai = SPlayer.runCommand(`testfor @p[rm=1,name=!"${config.name}"]`).victim[0];
         player = getPlayerByName(tikai);
-        config.debug ? world.say(`changed target to ${player.name}`):"";
+        // 攻撃先に移動とかする
+        SPlayer.navigateToEntity(player);
+        SPlayer.lookAtEntity(player);
+        config.debug ? world.say(`changed target to: ${player.name}`):"";
     }, 10);
 
     //1tickごとに処理を繰り返す
     interval(() => {
-        // 攻撃先に移動とかする
-        SPlayer.navigateToEntity(player);
-        SPlayer.lookAtEntity(player);
-
         SPlayer.addEffect(MinecraftEffectTypes.speed, 2, 1, false);
 
         // プレイヤーがターゲットに対して目線を併せていたらターゲットに対して攻撃する
@@ -60,11 +59,11 @@ register("pvp", "bot", (test) => {
 
         // y軸に差があったらプレイヤーを登らせたりする
         let sa = Math.trunc(player.location.y) - Math.trunc(SPlayer.location.y);
-        if(sa >= 3) {
+        if(sa >= 3 && lastPos.x !== SPlayer.location.x.toFixed(1) && lastPos.z !== SPlayer.location.z.toFixed(1)) {
             config.debug ? world.say(`block place(y="${sa}")`):"";
             place(SPlayer);
-        } else if(sa <= -3) {
-            config.debug ? world.say(`block break(y="${sa}")`):"";
+        } else if(sa <= -3 && lastPos.x !== SPlayer.location.x.toFixed(1) && lastPos.z !== SPlayer.location.z.toFixed(1)) {
+            config.debug ?  world.say(`block break(y="${sa}")`):"";
             break_(SPlayer);
         }
     }, 1);
