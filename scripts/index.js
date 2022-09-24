@@ -74,14 +74,15 @@ register("pvp", "bot", (test) => {
         if (lastPos.x === SPlayer.location.x.toFixed(1) && lastPos.z === SPlayer.location.z.toFixed(1)) {
             console.warn("stack");
             config.debug ?  world.say(`block place(y="${sa}")`):"";
-            for(let i = 0;i<5;i++) place(SPlayer);
+            //for(let i = 0;i<5;i++) 
+            place(SPlayer);
 
-            const r = new BlockRaycastOptions();
+            /*const r = new BlockRaycastOptions();
             r.maxDistance = 7;
             let block = SPlayer.getBlockFromViewVector();
             try{
                 block.setPermutation(MinecraftBlockTypes.air.createDefaultBlockPermutation());
-            }catch{};
+            }catch{};*/
         }
         lastPos.x = SPlayer.location.x.toFixed(1);
         lastPos.z = SPlayer.location.z.toFixed(1);
