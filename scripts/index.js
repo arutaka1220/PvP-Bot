@@ -73,9 +73,10 @@ register("pvp", "bot", (test) => {
         if (lastPos.x === SPlayer.location.x.toFixed(1) && lastPos.z === SPlayer.location.z.toFixed(1)) {
             config.debug ? world.say("player stack"):"";
             //for(let i = 0;i<5;i++) 
-            world.say(getBlock(SPlayer.location.x, SPlayer.location.y, SPlayer.location.z));
-            if (getBlock(SPlayer.location.x, SPlayer.location.y, SPlayer.location.z))
-                place(SPlayer);
+            if (getBlock(SPlayer.location.x + 1, SPlayer.location.y, SPlayer.location.z) !== "minecraft:air" &&
+                getBlock(SPlayer.location.x - 1, SPlayer.location.y, SPlayer.location.z) !== "minecraft:air" &&
+                getBlock(SPlayer.location.x, SPlayer.location.y, SPlayer.location.z + 1) !== "minecraft:air" &&
+                getBlock(SPlayer.location.x, SPlayer.location.y, SPlayer.location.z - 1) !== "minecraft:air") place(SPlayer);
 
             /*const r = new BlockRaycastOptions();
             r.maxDistance = 7;
