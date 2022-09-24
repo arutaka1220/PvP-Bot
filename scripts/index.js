@@ -9,6 +9,8 @@ const config = {
     debug: false
 }
 
+let pos = {};
+
 register("pvp", "bot", (test) => {
     // プレイヤー
     let SPlayer = test.spawnSimulatedPlayer(new BlockLocation(0,0,0), config.name);
