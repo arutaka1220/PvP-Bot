@@ -18,7 +18,7 @@ let lastPos = {
 register("pvp", "bot", (test) => {
     // プレイヤー
     let SPlayer = test.spawnSimulatedPlayer(new BlockLocation(0,0,0), config.name);
-    let tikai = SPlayer.runCommand(`testfor @p[rm=1,name=!"${config.name}"]`).victim[0];
+    let tikai = SPlayer.runCommand(`testfor @p[m=!c,rm=1,name=!"${config.name}"]`).victim[0];
 
     // 剣を持たせる
     SPlayer.setItem(new ItemStack(Items.get(config.sword)), 0);
