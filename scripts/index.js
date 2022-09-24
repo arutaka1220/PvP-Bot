@@ -18,7 +18,7 @@ let lastPos = {
 register("pvp", "bot", (test) => {
     // プレイヤー
     let SPlayer = test.spawnSimulatedPlayer(new BlockLocation(0,0,0), config.name);
-    let tikai = SPlayer.runCommand(`testfor @p[rm=1,name=!"${config.name}"]`).victim[0];
+    let tikai = SPlayer.runCommand(`testfor @p[m=!c,rm=1,name=!"${config.name}"]`).victim[0];
 
     // 剣を持たせる
     SPlayer.setItem(new ItemStack(Items.get(config.sword)), 0);
@@ -36,6 +36,7 @@ register("pvp", "bot", (test) => {
 
     // 定期的に攻撃先を変える
     interval(() => {
+<<<<<<< HEAD
         tikai = SPlayer.runCommand(`testfor @p[rm=1,name=!"${config.name}"]`).victim[0];
         if(player.name != tikai) {
             player = getPlayerByName(tikai);
@@ -44,6 +45,14 @@ register("pvp", "bot", (test) => {
             SPlayer.lookAtEntity(player);
             config.debug ? world.say(`${SPlayer.name} >> changed target to: ${player.name}`):"";
         }
+=======
+        tikai = SPlayer.runCommand(`testfor @p[m=!c, rm=1,name=!"${config.name}"]`).victim[0];
+        player = getPlayerByName(tikai);
+        // 攻撃先に移動とかする
+        SPlayer.navigateToEntity(player);
+        SPlayer.lookAtEntity(player);
+        config.debug ? world.say(`changed target to: ${player.name}`):"";
+>>>>>>> 26d6e9eae0527db3c8b168abf65502347bf4d33c
     }, 10);
 
     //1tickごとに処理を繰り返す
