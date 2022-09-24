@@ -70,7 +70,7 @@ register("pvp", "bot", (test) => {
 
         // 場所が変わってなかったら上に登らせる
 
-        if (lastPos.x === Math.round(SPlayer.location.x) && lastPos.y === Math.round(SPlayer.location.y)) {
+        if (lastPos.x === Math.round(SPlayer.location.x) && lastPos.z === Math.round(SPlayer.location.z)) {
             config.debug ?  world.say(`block place(y="${sa}")`):"";
             place(SPlayer);
         }
