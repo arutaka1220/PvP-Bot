@@ -27,7 +27,6 @@ register("pvp", "bot", (test) => {
     SPlayer.runCommand("replaceitem entity @s slot.armor.head 0 diamond_helmet");
     SPlayer.runCommand("replaceitem entity @s slot.armor.legs 0 diamond_leggings");
 
-    
     config.debug ? world.say(`${SPlayer.name} >> initialize complete`):"";
 
     /** ターゲット @type { Player } */
@@ -36,23 +35,14 @@ register("pvp", "bot", (test) => {
 
     // 定期的に攻撃先を変える
     interval(() => {
-<<<<<<< HEAD
-        tikai = SPlayer.runCommand(`testfor @p[rm=1,name=!"${config.name}"]`).victim[0];
-        if(player.name != tikai) {
-            player = getPlayerByName(tikai);
-            // 攻撃先に移動とかする
-            SPlayer.navigateToEntity(player);
-            SPlayer.lookAtEntity(player);
-            config.debug ? world.say(`${SPlayer.name} >> changed target to: ${player.name}`):"";
-        }
-=======
         tikai = SPlayer.runCommand(`testfor @p[m=!c, rm=1,name=!"${config.name}"]`).victim[0];
         player = getPlayerByName(tikai);
         // 攻撃先に移動とかする
         SPlayer.navigateToEntity(player);
         SPlayer.lookAtEntity(player);
         config.debug ? world.say(`changed target to: ${player.name}`):"";
->>>>>>> 26d6e9eae0527db3c8b168abf65502347bf4d33c
+
+        SPlayer.health = SPlayer.getComponent("health").current;
     }, 10);
 
     //1tickごとに処理を繰り返す
@@ -106,10 +96,24 @@ world.events.entityHurt.subscribe(ev => {
     const { hurtEntity, damagingEntity, damage } = ev;
     if(hurtEntity.name == undefined || damagingEntity.name == undefined) return;
      
-    hurtEntity.onScreenDisplay.setActionBar(`§d${damagingEntity.name} §bから §d${damage}§eDamage §bを受けた`);
-    damagingEntity.onScreenDisplay.setActionBar(`§d${hurtEntity.name} §bに §d${damage}§eDamage §bを与えた`);
+    let health = hurtEntity.getComponent("health").current;
+
+    hurtEntity.onScreenDisplay.setActionBar(`§d${damagingEntity.name} §cから §d${damage}§eDamage §cを受けた(残り §d${Math.floor(health)}§c)`);
+    damagingEntity.onScreenDisplay.setActionBar(`§d${hurtEntity.name} §bに §d${damage}§eDamage §bを与えた(残り §d${Math.floor(health)}§b)`);
 });
 
+world.events.tick.subscribe(ev => {
+    for(const player of world.getPlayers()) {
+        let health = player.getComponent("health").current;
+        try{
+            player.runCommand(`scoreboard players set @s health ${Math.floor(health)}`);
+        } catch {
+            world.getDimension("overworld").runCommand("scoreboard objectives add health dummy §d§lHP");
+            world.getDimension("overworld").runCommand("scoreboard objectives setdisplay belowname health");
+            world.getDimension("overworld").runCommand("scoreboard objectives setdisplay sidebar health");
+        }
+    }
+});
 
 function getPlayerByName(name) {
     let pp = null;
