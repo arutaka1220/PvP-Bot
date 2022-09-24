@@ -1,4 +1,4 @@
-import { world, BlockLocation, GameMode, MinecraftEffectTypes, ItemStack, MinecraftItemTypes, Items, EntityRaycastOptions, MinecraftBlockTypes, Player, Location, Vector} from "mojang-minecraft";
+import { world, BlockLocation, GameMode, MinecraftEffectTypes, ItemStack, MinecraftItemTypes, Items, EntityRaycastOptions, MinecraftBlockTypes, Player, Location, Vector, BlockRaycastOptions} from "mojang-minecraft";
 import { register, SimulatedPlayer } from "mojang-gametest";
 import { setTickTimeout as timeout, setTickInterval as interval} from "./scheduling";
 
@@ -67,16 +67,25 @@ register("pvp", "bot", (test) => {
             config.debug ?  world.say(`block break(y="${sa}")`):"";
             break_(SPlayer);
         }
-
-        // 場所が変わってなかったら上に登らせる
-
-        if (lastPos.x === Math.round(SPlayer.location.x) && lastPos.y === Math.round(SPlayer.location.y)) {
-            config.debug ?  world.say(`block place(y="${sa}")`):"";
-            place(SPlayer);
-        }
-        lastPos.x = Math.round(SPlayer.location.x);
-        lastPos.z = Math.round(SPlayer.location.z);
     }, 1);
+
+    interval(() => {
+        // 場所が変わってなかったら上に登らせる
+        if (lastPos.x === SPlayer.location.x.toFixed(2) && lastPos.z === SPlayer.location.z.toFixed(2)) {
+            console.warn("stack");
+            config.debug ?  world.say(`block place(y="${sa}")`):"";
+            for(let i = 0;i<5;i++) place(SPlayer);
+
+            const r = new BlockRaycastOptions();
+            r.maxDistance = 7;
+            let block = SPlayer.getBlockFromViewVector();
+            try{
+                block.setPermutation(MinecraftBlockTypes.air.createDefaultBlockPermutation());
+            }catch{};
+        }
+        lastPos.x = SPlayer.location.x.toFixed(2);
+        lastPos.z = SPlayer.location.z.toFixed(2);
+    }, 50)
 
 }).structureName("mystructure:test").maxTicks(20*60*5);
 
