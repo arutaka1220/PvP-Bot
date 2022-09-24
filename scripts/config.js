@@ -6,6 +6,7 @@ export default
     sword: "minecraft:iron_sword",
     debug: true,
     reach: 4,
+    errorStackCount: 5,
 
     weapon: {
         // nullにすることで持たせないようにする
