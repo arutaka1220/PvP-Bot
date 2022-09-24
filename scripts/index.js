@@ -73,7 +73,9 @@ register("pvp", "bot", (test) => {
         if (lastPos.x === SPlayer.location.x.toFixed(1) && lastPos.z === SPlayer.location.z.toFixed(1)) {
             config.debug ? world.say("player stack"):"";
             //for(let i = 0;i<5;i++) 
-            place(SPlayer);
+            world.say(getBlock(SPlayer.location.x, SPlayer.location.y, SPlayer.location.z));
+            if (getBlock(SPlayer.location.x, SPlayer.location.y, SPlayer.location.z))
+                place(SPlayer);
 
             /*const r = new BlockRaycastOptions();
             r.maxDistance = 7;
