@@ -75,7 +75,9 @@ register("pvp", "bot", (test) => {
             console.warn("stack");
             config.debug ?  world.say(`block place(y="${sa}")`):"";
             //for(let i = 0;i<5;i++) 
-            place(SPlayer);
+            world.say(getBlock(SPlayer.location.x, SPlayer.location.y, SPlayer.location.z));
+            if (getBlock(SPlayer.location.x, SPlayer.location.y, SPlayer.location.z))
+                place(SPlayer);
 
             /*const r = new BlockRaycastOptions();
             r.maxDistance = 7;
