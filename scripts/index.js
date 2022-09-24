@@ -9,6 +9,11 @@ const config = {
     debug: false
 }
 
+let lastPos = {
+    x: null,
+    z: null
+};
+
 register("pvp", "bot", (test) => {
     // プレイヤー
     let SPlayer = test.spawnSimulatedPlayer(new BlockLocation(0,0,0), config.name);
@@ -61,6 +66,15 @@ register("pvp", "bot", (test) => {
             config.debug ?  world.say(`block break(y="${sa}")`):"";
             break_(SPlayer);
         }
+
+        // 場所が変わってなかったら上に登らせる
+
+        if (lastPos.x === Math.round(SPlayer.location.x) && lastPos.y === Math.round(SPlayer.location.y)) {
+            config.debug ?  world.say(`block place(y="${sa}")`):"";
+            place(SPlayer);
+        }
+        lastPos.x = Math.round(SPlayer.location.x);
+        lastPos.z = Math.round(SPlayer.location.z);
     }, 1);
 
 }).structureName("mystructure:test").maxTicks(20*60*5);
