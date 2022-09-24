@@ -28,7 +28,7 @@ register("pvp", "bot", (test) => {
     SPlayer.runCommand("replaceitem entity @s slot.armor.legs 0 diamond_leggings");
 
     
-    config.debug ? world.say("initialize complete"):"";
+    config.debug ? world.say(`${SPlayer.name} >> initialize complete`):"";
 
     /** ターゲット @type { Player } */
     let player;
@@ -36,12 +36,14 @@ register("pvp", "bot", (test) => {
 
     // 定期的に攻撃先を変える
     interval(() => {
-        tikai = SPlayer.runCommand(`testfor @p[m=!c, rm=1,name=!"${config.name}"]`).victim[0];
-        player = getPlayerByName(tikai);
-        // 攻撃先に移動とかする
-        SPlayer.navigateToEntity(player);
-        SPlayer.lookAtEntity(player);
-        config.debug ? world.say(`changed target to: ${player.name}`):"";
+        tikai = SPlayer.runCommand(`testfor @p[rm=1,name=!"${config.name}"]`).victim[0];
+        if(player.name != tikai) {
+            player = getPlayerByName(tikai);
+            // 攻撃先に移動とかする
+            SPlayer.navigateToEntity(player);
+            SPlayer.lookAtEntity(player);
+            config.debug ? world.say(`${SPlayer.name} >> changed target to: ${player.name}`):"";
+        }
     }, 10);
 
     //1tickごとに処理を繰り返す
@@ -54,29 +56,30 @@ register("pvp", "bot", (test) => {
         let a = SPlayer.getEntitiesFromViewVector(r)[0];
         if(a && a.nameTag == tikai) {
             SPlayer.attack();
-            config.debug ? world.say(`attack to: ${a.name}`):"";
+            config.debug ? world.say(`${SPlayer.name} >> attack to: ${a.name}`):"";
         }
 
         // y軸に差があったらプレイヤーを登らせたりする
         let sa = Math.trunc(player.location.y) - Math.trunc(SPlayer.location.y);
         if(sa >= 3 && lastPos.x !== SPlayer.location.x.toFixed(1) && lastPos.z !== SPlayer.location.z.toFixed(1)) {
-            config.debug ? world.say(`block place(y="${sa}")`):"";
+            config.debug ? world.say(`${SPlayer.name} >> block place(y="${sa}")`):"";
             place(SPlayer);
         } else if(sa <= -3 && lastPos.x !== SPlayer.location.x.toFixed(1) && lastPos.z !== SPlayer.location.z.toFixed(1)) {
-            config.debug ?  world.say(`block break(y="${sa}")`):"";
+            config.debug ?  world.say(`${SPlayer.name} >> block break(y="${sa}")`):"";
             break_(SPlayer);
         }
     }, 1);
 
     interval(() => {
+        config.debug ? world.say(`${SPlayer.name} >> Target: ${player.name}`):"";
         // 場所が変わってなかったら上に登らせる
         if (lastPos.x === SPlayer.location.x.toFixed(1) && lastPos.z === SPlayer.location.z.toFixed(1)) {
-            config.debug ? world.say("player stack"):"";
+            config.debug ? world.say(`${SPlayer.name} >> player stack`):"";
             //for(let i = 0;i<5;i++) 
-            if (getBlock(SPlayer.location.x + 1, SPlayer.location.y, SPlayer.location.z) !== "minecraft:air" &&
-                getBlock(SPlayer.location.x - 1, SPlayer.location.y, SPlayer.location.z) !== "minecraft:air" &&
-                getBlock(SPlayer.location.x, SPlayer.location.y, SPlayer.location.z + 1) !== "minecraft:air" &&
-                getBlock(SPlayer.location.x, SPlayer.location.y, SPlayer.location.z - 1) !== "minecraft:air") place(SPlayer);
+            if (getBlock(SPlayer.location.x + 1, SPlayer.location.y, SPlayer.location.z).id !== "minecraft:air" &&
+                getBlock(SPlayer.location.x - 1, SPlayer.location.y, SPlayer.location.z).id !== "minecraft:air" &&
+                getBlock(SPlayer.location.x, SPlayer.location.y, SPlayer.location.z + 1).id !== "minecraft:air" &&
+                getBlock(SPlayer.location.x, SPlayer.location.y, SPlayer.location.z - 1).id !== "minecraft:air") place(SPlayer);
 
             /*const r = new BlockRaycastOptions();
             r.maxDistance = 7;
@@ -95,8 +98,8 @@ world.events.entityHurt.subscribe(ev => {
     const { hurtEntity, damagingEntity, damage } = ev;
     if(hurtEntity.name == undefined || damagingEntity.name == undefined) return;
      
-    hurtEntity.onScreenDisplay.setActionBar(`§d${damagingEntity.name} §bから §d${damage} §bを受けた`);
-    damagingEntity.onScreenDisplay.setActionBar(`§d${hurtEntity.name} §bに §d${damage} §bを与えた`);
+    hurtEntity.onScreenDisplay.setActionBar(`§d${damagingEntity.name} §bから §d${damage}§eDamage §bを受けた`);
+    damagingEntity.onScreenDisplay.setActionBar(`§d${hurtEntity.name} §bに §d${damage}§eDamage §bを与えた`);
 });
 
 
