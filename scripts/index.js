@@ -63,7 +63,7 @@ register("pvp", "bot", (test) => {
         if(sa >= 3) {
             config.debug ?  world.say(`block place(y="${sa}")`):"";
             place(SPlayer);
-        } else if(sa <= -3) {
+        } else if(sa <= -3 && lastPos.x !== SPlayer.location.x.toFixed(1) && lastPos.z !== SPlayer.location.z.toFixed(1)) {
             config.debug ?  world.say(`block break(y="${sa}")`):"";
             break_(SPlayer);
         }
@@ -86,7 +86,7 @@ register("pvp", "bot", (test) => {
         }
         lastPos.x = SPlayer.location.x.toFixed(1);
         lastPos.z = SPlayer.location.z.toFixed(1);
-    }, 5)
+    }, 10)
 
 }).structureName("mystructure:test").maxTicks(20*60*5);
 
