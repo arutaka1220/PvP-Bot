@@ -1,6 +1,6 @@
 import { world, BlockLocation, MinecraftEffectTypes, ItemStack, Items, EntityRaycastOptions, MinecraftBlockTypes, Location } from "mojang-minecraft";
 import { register, SimulatedPlayer } from "mojang-gametest";
-import { setTickTimeout as timeout, setTickInterval as interval} from "./scheduling";
+import { setTickTimeout as timeout, setTickInterval as interval, clearTickInterval as clearInterval, clearTickTimeout as clearTimeout} from "./scheduling";
 import config from "./config";
 
 try{
@@ -91,8 +91,12 @@ register("pvp", "bot", (test) => {
             stackCount++;
             if(stackCount > config.errorStackCount) {
                 test.fail(`StackCount: ${stackCount}`);
+                clearInterval(1);
+                clearInterval(2);
+                clearInterval(3);
+                return
             }
-            config.debug ? world.say(`§8[§a${SPlayer.name}§8] §6Stack(X=${Math.floor(SPlayer.location.x)},Y=${Math.floor(SPlayer.location.y)},Z=${Math.floor(SPlayer.location.z)})`):"";
+            config.debug ? world.say(`§8[§a${SPlayer.name}§8] §6Stack(X=${Math.floor(SPlayer.location.x)},Y=${Math.floor(SPlayer.location.y)},Z=${Math.floor(SPlayer.location.z)},COUNT=${stackCount})`):"";
 
             let z = getBlock2(new BlockLocation(m(SPlayer.location.x) + 1, m(SPlayer.location.y), m(SPlayer.location.z)));
             let x = getBlock2(new BlockLocation(m(SPlayer.location.x) - 1, m(SPlayer.location.y), m(SPlayer.location.z)));
