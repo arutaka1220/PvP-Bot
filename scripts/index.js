@@ -67,23 +67,11 @@ register("pvp", "bot", (test) => {
             config.debug ?  world.say(`block break(y="${sa}")`):"";
             break_(SPlayer);
         }
-<<<<<<< HEAD
-
-        // 場所が変わってなかったら上に登らせる
-
-        if (lastPos.x === Math.round(SPlayer.location.x) && lastPos.z === Math.round(SPlayer.location.z)) {
-            config.debug ?  world.say(`block place(y="${sa}")`):"";
-            place(SPlayer);
-        }
-        lastPos.x = Math.round(SPlayer.location.x);
-        lastPos.z = Math.round(SPlayer.location.z);
-=======
->>>>>>> ca74821db2e9e94a0fcbe233c96e4fe6084bdd4d
     }, 1);
 
     interval(() => {
         // 場所が変わってなかったら上に登らせる
-        if (lastPos.x === SPlayer.location.x.toFixed(2) && lastPos.z === SPlayer.location.z.toFixed(2)) {
+        if (lastPos.x === SPlayer.location.x.toFixed(1) && lastPos.z === SPlayer.location.z.toFixed(1)) {
             console.warn("stack");
             config.debug ?  world.say(`block place(y="${sa}")`):"";
             for(let i = 0;i<5;i++) place(SPlayer);
@@ -95,8 +83,8 @@ register("pvp", "bot", (test) => {
                 block.setPermutation(MinecraftBlockTypes.air.createDefaultBlockPermutation());
             }catch{};
         }
-        lastPos.x = SPlayer.location.x.toFixed(2);
-        lastPos.z = SPlayer.location.z.toFixed(2);
+        lastPos.x = SPlayer.location.x.toFixed(1);
+        lastPos.z = SPlayer.location.z.toFixed(1);
     }, 50)
 
 }).structureName("mystructure:test").maxTicks(20*60*5);
