@@ -36,7 +36,7 @@ register("pvp", "bot", (test) => {
 
     // 定期的に攻撃先を変える
     interval(() => {
-        tikai = SPlayer.runCommand(`testfor @p[rm=1,name=!"${config.name}"]`).victim[0];
+        tikai = SPlayer.runCommand(`testfor @p[m=!c, rm=1,name=!"${config.name}"]`).victim[0];
         player = getPlayerByName(tikai);
         config.debug ?  world.say(`changed target to ${player.name}`):"";
     }, 10);
