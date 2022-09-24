@@ -35,7 +35,6 @@ register("pvp", "bot", (test) => {
 
     // 定期的に攻撃先を変える
     interval(() => {
-<<<<<<< HEAD
         tikai = SPlayer.runCommand(`testfor @p[m=!c, rm=1,name=!"${config.name}"]`).victim[0];
         player = getPlayerByName(tikai);
         // 攻撃先に移動とかする
@@ -44,16 +43,6 @@ register("pvp", "bot", (test) => {
         config.debug ? world.say(`changed target to: ${player.name}`):"";
 
         SPlayer.health = SPlayer.getComponent("health").current;
-=======
-        tikai = SPlayer.runCommand(`testfor @p[rm=1,name=!"${config.name}"]`).victim[0];
-        if(player.name != tikai) {
-            player = getPlayerByName(tikai);
-            // 攻撃先に移動とかする
-            SPlayer.navigateToEntity(player);
-            SPlayer.lookAtEntity(player);
-            config.debug ? world.say(`${SPlayer.name} >> changed target to: ${player.name}`):"";
-        }
->>>>>>> c253a487fcd7bc969cf5c251d41b2df3a417a925
     }, 10);
 
     //1tickごとに処理を繰り返す
