@@ -6,7 +6,7 @@ const config = {
     name: "PvP Bot",
     block: MinecraftBlockTypes.planks.createDefaultBlockPermutation(),
     sword: "minecraft:iron_sword",
-    debug: false
+    debug: true
 }
 
 let lastPos = {
@@ -38,15 +38,14 @@ register("pvp", "bot", (test) => {
     interval(() => {
         tikai = SPlayer.runCommand(`testfor @p[m=!c, rm=1,name=!"${config.name}"]`).victim[0];
         player = getPlayerByName(tikai);
-        config.debug ?  world.say(`changed target to ${player.name}`):"";
+        // 攻撃先に移動とかする
+        SPlayer.navigateToEntity(player);
+        SPlayer.lookAtEntity(player);
+        config.debug ? world.say(`changed target to: ${player.name}`):"";
     }, 10);
 
     //1tickごとに処理を繰り返す
     interval(() => {
-        // 攻撃先に移動とかする
-        SPlayer.navigateToEntity(player);
-        SPlayer.lookAtEntity(player);
-
         SPlayer.addEffect(MinecraftEffectTypes.speed, 2, 1, false);
 
         // プレイヤーがターゲットに対して目線を併せていたらターゲットに対して攻撃する
@@ -55,13 +54,13 @@ register("pvp", "bot", (test) => {
         let a = SPlayer.getEntitiesFromViewVector(r)[0];
         if(a && a.nameTag == tikai) {
             SPlayer.attack();
-            config.debug ?  world.say(`attack to: ${a.name}`):"";
+            config.debug ? world.say(`attack to: ${a.name}`):"";
         }
 
         // y軸に差があったらプレイヤーを登らせたりする
         let sa = Math.trunc(player.location.y) - Math.trunc(SPlayer.location.y);
-        if(sa >= 3) {
-            config.debug ?  world.say(`block place(y="${sa}")`):"";
+        if(sa >= 3 && lastPos.x !== SPlayer.location.x.toFixed(1) && lastPos.z !== SPlayer.location.z.toFixed(1)) {
+            config.debug ? world.say(`block place(y="${sa}")`):"";
             place(SPlayer);
         } else if(sa <= -3 && lastPos.x !== SPlayer.location.x.toFixed(1) && lastPos.z !== SPlayer.location.z.toFixed(1)) {
             config.debug ?  world.say(`block break(y="${sa}")`):"";
@@ -72,8 +71,7 @@ register("pvp", "bot", (test) => {
     interval(() => {
         // 場所が変わってなかったら上に登らせる
         if (lastPos.x === SPlayer.location.x.toFixed(1) && lastPos.z === SPlayer.location.z.toFixed(1)) {
-            console.warn("stack");
-            config.debug ?  world.say(`block place(y="${sa}")`):"";
+            config.debug ? world.say("player stack"):"";
             //for(let i = 0;i<5;i++) 
             world.say(getBlock(SPlayer.location.x, SPlayer.location.y, SPlayer.location.z));
             if (getBlock(SPlayer.location.x, SPlayer.location.y, SPlayer.location.z))
@@ -88,7 +86,7 @@ register("pvp", "bot", (test) => {
         }
         lastPos.x = SPlayer.location.x.toFixed(1);
         lastPos.z = SPlayer.location.z.toFixed(1);
-    }, 10)
+    }, 5)
 
 }).structureName("mystructure:test").maxTicks(20*60*5);
 
