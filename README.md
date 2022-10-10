@@ -1,5 +1,5 @@
 # PvP-Botの使い方
-> /structure save test ~~~ ~~~ disk (初回のみ)\n
+> /structure save test ~~~ ~~~ disk (初回のみ)-><br />
 > /gametest run pvp:bot
 ### もしバグったとき
 > /reload
