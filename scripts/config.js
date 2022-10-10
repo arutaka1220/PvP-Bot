@@ -2,18 +2,19 @@ import { MinecraftBlockTypes } from "mojang-minecraft"
 export default
 {
     name: "PvP Bot",
-    block: MinecraftBlockTypes.planks.createDefaultBlockPermutation(),
-    sword: "minecraft:iron_sword",
+    tagName: "PvP Bot",
+    block: MinecraftBlockTypes.cobblestone.createDefaultBlockPermutation(),
     debug: true,
-    reach: 4,
-    errorStackCount: 5,
+    reach: 5,
+    errorStackCount: null,
+    byeeeHealth: 10,
 
     weapon: {
         // nullにすることで持たせないようにする
         sword: "iron_sword",
-        chestplate: "diamond_chestplate",
-        feet: "diamond_boots",
         head: "diamond_helmet",
-        legs: "diamond_leggings"
+        chestplate: "diamond_chestplate",
+        legs: "diamond_leggings",
+        feet: "diamond_boots",
     }
 }
