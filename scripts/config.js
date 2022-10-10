@@ -4,10 +4,10 @@ export default
     name: "PvP Bot",
     tagName: "PvP Bot",
     block: MinecraftBlockTypes.cobblestone.createDefaultBlockPermutation(),
-    debug: true,
+    debug: false,
     reach: 5,
     errorStackCount: null,
-    byeeeHealth: 10,
+    runHealth: 10,
 
     weapon: {
         // nullにすることで持たせないようにする

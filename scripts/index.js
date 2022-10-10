@@ -30,7 +30,7 @@ register("pvp", "bot", (test) => {
     // プレイヤー
     let SPlayer = test.spawnSimulatedPlayer(new BlockLocation(0,0,0), config.name);
 
-    SPlayer.nigeru = false;
+    SPlayer.run = false;
     SPlayer.addTag(config.tagName);
     let closest = SPlayer.runCommand(`testfor @p[rm=1,name=!"${config.name}"]`).victim[0];
 
@@ -53,24 +53,13 @@ register("pvp", "bot", (test) => {
         if(player.name != closest) {
             player = getPlayerByName(closest);
             // 攻撃先に移動とかする
-            !SPlayer.nigeru ? SPlayer.navigateToEntity(player):"";
+            !SPlayer.run ? SPlayer.navigateToEntity(player):"";
             SPlayer.lookAtEntity(player);
             SPlayer.lookAtEntity(player);
             debug(SPlayer.name, "TARGET", `Change Target`, [{name: "NAME", value: player.name}], DEBUG_TYPE.INFO);
         }
-        SPlayer.navigateToEntity(player);
-        SPlayer.health = SPlayer.getComponent("health").current;
-        if(SPlayer.health <= config.byeeeHealth) {
-            world.say(`§8[§a${SPlayer.name}§8] §7さいなら！！`);
-            SPlayer.moveToLocation(new Location(
-                    Math.sign(player.location.x) === 1 ? -player.location.x : +player.location.x,
-                    Math.sign(player.location.y) === 1 ? -player.location.y : +player.location.y,
-                    Math.sign(player.location.z) === 1 ? -player.location.z : +player.location.z,
-                ));
-            SPlayer.nigeru = true;
-        } else {
-            SPlayer.nigeru = false;
-        }
+
+        
     }, 10);
     
     //1tickごとに処理を繰り返す
