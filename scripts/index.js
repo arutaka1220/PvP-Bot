@@ -17,7 +17,7 @@ let stackCount = 0;
 register("pvp", "bot", (test) => {
     // プレイヤー
     let SPlayer = test.spawnSimulatedPlayer(new BlockLocation(0,0,0), config.name);
-    let tikai = SPlayer.runCommand(`testfor @p[rm=1,name=!"${config.name}"]`).victim[0];
+    let closest = SPlayer.runCommand(`testfor @p[rm=1,name=!"${config.name}"]`).victim[0];
 
     // 剣を持たせる
     config.weapon.sword !== null ? SPlayer.setItem(new ItemStack(Items.get("minecraft:"+config.weapon.sword)), 0):"";
@@ -30,13 +30,13 @@ register("pvp", "bot", (test) => {
 
     /** ターゲット @type { Player } */
     let player;
-    player = getPlayerByName(tikai);
+    player = getPlayerByName(closest);
 
     // 定期的に攻撃先を変える
     interval(() => {
-        tikai = SPlayer.runCommand(`testfor @p[rm=1,name=!"${config.name}"]`).victim[0];
-        if(player.name != tikai) {
-            player = getPlayerByName(tikai);
+        closest = SPlayer.runCommand(`testfor @p[rm=1,name=!"${config.name}"]`).victim[0];
+        if(player.name != closest) {
+            player = getPlayerByName(closest);
             // 攻撃先に移動とかする
             SPlayer.navigateToEntity(player);
             SPlayer.lookAtEntity(player);
@@ -55,7 +55,7 @@ register("pvp", "bot", (test) => {
         const r = new EntityRaycastOptions();
         r.maxDistance = config.reach;
         let a = SPlayer.getEntitiesFromViewVector(r)[0];
-        if(a && a.nameTag == tikai) {
+        if(a && a.nameTag == closest) {
             let {x,y,z} = SPlayer.location;
             let {x:x1,y:y1,z:z1} = player.location;
             let reach = Math.sqrt((x - x1) ** 2 + (y - y1) ** 2 + (z - z1) ** 2);
