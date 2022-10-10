@@ -32,7 +32,7 @@ register("pvp", "bot", (test) => {
 
     SPlayer.run = false;
     SPlayer.addTag(config.tagName);
-    let closest = SPlayer.runCommand(`testfor @p[rm=1,name=!"${config.name}"]`).victim[0];
+    let closest = SPlayer.runCommand(`testfor @p[name=!"${config.name}"]`).victim[0];
 
     // 剣を持たせる
     config.weapon.sword !== null ? SPlayer.setItem(new ItemStack(Items.get("minecraft:"+config.weapon.sword)), 0):"";
@@ -49,11 +49,12 @@ register("pvp", "bot", (test) => {
 
     // 定期的に攻撃先を変える
     interval(() => {
-        closest = SPlayer.runCommand(`testfor @p[rm=1,name=!"${config.name}"]`).victim[0];
+        closest = SPlayer.runCommand(`testfor @p[name=!"${config.name}"]`).victim[0];
         if(player.name != closest) {
             player = getPlayerByName(closest);
             // 攻撃先に移動とかする
-            !SPlayer.run ? SPlayer.navigateToEntity(player):"";
+
+            SPlayer.navigateToEntity(player);
             SPlayer.lookAtEntity(player);
             SPlayer.lookAtEntity(player);
             debug(SPlayer.name, "TARGET", `Change Target`, [{name: "NAME", value: player.name}], DEBUG_TYPE.INFO);
@@ -91,7 +92,7 @@ register("pvp", "bot", (test) => {
                     },
                     {
                         name: "REACH",
-                        value: (Math.sqrt((x - x1) ** 2 + (y - y1) ** 2 + (z - z1) ** 2)).toFixed(2),
+                        value: reach.toFixed(2),
                         valueUpper: true
                     }
                 ],
@@ -126,9 +127,10 @@ register("pvp", "bot", (test) => {
                 clearInterval(1);
                 clearInterval(2);
                 clearInterval(3);
-                return
+                return;
             }
-
+            let {x,y,z} = SPlayer.location;
+            let {x:x1,y:y1,z:z1} = player.location;
             debug(SPlayer.name, "STACK", `Stack`, 
             [
                 {
@@ -146,26 +148,39 @@ register("pvp", "bot", (test) => {
                 {
                     name: "COUNT",
                     value: stackCount
+                },
+                {
+                    name: "KYORI",
+                    value: Math.sqrt((x - x1) ** 2 + (y - y1) ** 2 + (z - z1) ** 2)
                 }
             ], DEBUG_TYPE.WARNING);
-
-            let z = getBlock2(new BlockLocation(m(SPlayer.location.x)+1, m(SPlayer.location.y),   m(SPlayer.location.z)));
-            let x = getBlock2(new BlockLocation(m(SPlayer.location.x)-1, m(SPlayer.location.y),   m(SPlayer.location.z)));
-            let c = getBlock2(new BlockLocation(m(SPlayer.location.x),   m(SPlayer.location.y),   m(SPlayer.location.z)+1));
-            let v = getBlock2(new BlockLocation(m(SPlayer.location.x),   m(SPlayer.location.y),   m(SPlayer.location.z)-1));
-            let b = getBlock2(new BlockLocation(m(SPlayer.location.x),   m(SPlayer.location.y)+2, m(SPlayer.location.z)));
-            if (z.id !== "minecraft:air" &&
-                x.id !== "minecraft:air" &&
-                c.id !== "minecraft:air" &&
-                v.id !== "minecraft:air") {
-                    place(SPlayer)
-                    if(b.id !== "minecraft:air") {
-                        const d = MinecraftBlockTypes.air.createDefaultBlockPermutation();
-                        b.setPermutation(d);
-                    }
-                };
-        } else {
-            stackCount = 0;
+            if(15 < Math.sqrt((x - x1) ** 2 + (y - y1) ** 2 + (z - z1) ** 2)) {
+                SPlayer.navigateToBlock(new BlockLocation(
+                    player.location.x,
+                    -60,
+                    player.location.z,
+                ));
+                SPlayer.movetoLocs = true;
+            } else {  
+                z = getBlock2(new BlockLocation(m(SPlayer.location.x)+1, m(SPlayer.location.y),   m(SPlayer.location.z)));
+                x = getBlock2(new BlockLocation(m(SPlayer.location.x)-1, m(SPlayer.location.y),   m(SPlayer.location.z)));
+                let c = getBlock2(new BlockLocation(m(SPlayer.location.x),   m(SPlayer.location.y),   m(SPlayer.location.z)+1));
+                let v = getBlock2(new BlockLocation(m(SPlayer.location.x),   m(SPlayer.location.y),   m(SPlayer.location.z)-1));
+                let b = getBlock2(new BlockLocation(m(SPlayer.location.x),   m(SPlayer.location.y)+2, m(SPlayer.location.z)));
+                if (z.id !== "minecraft:air" &&
+                    x.id !== "minecraft:air" &&
+                    c.id !== "minecraft:air" &&
+                    v.id !== "minecraft:air") {
+                        place(SPlayer)
+                        if(b.id !== "minecraft:air") {
+                            const d = MinecraftBlockTypes.air.createDefaultBlockPermutation();
+                            b.setPermutation(d);
+                        }
+                } else {
+                    stackCount = 0;
+                    SPlayer.movetoLocs = false;
+                }
+            }
         }
         lastPos.x = SPlayer.location.x.toFixed(1);
         lastPos.z = SPlayer.location.z.toFixed(1);
